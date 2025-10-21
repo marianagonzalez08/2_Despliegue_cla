@@ -35,7 +35,7 @@ import streamlit as st
 
 st.title('Predicción CarRisk')
 
-edad = st.slider('Edad', min_value=data['edad'].min(), max_value=data['edad'].max(), value=int(data['edad'].mean()), step=1)
+edad = st.slider('edad', min_value=data['edad'].min(), max_value=data['edad'].max(), value=int(data['edad'].mean()), step=1)
 tipoCarro = ['combi', 'sport', 'family', 'minivan'] # Assuming these are the possible car types
 
 
