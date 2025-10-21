@@ -36,7 +36,7 @@ import streamlit as st
 st.title('Predicción CarRisk')
 
 edad = st.slider('edad', min_value=18, max_value=80, value=30, step=1)
-tipoCarro = ['combi', 'sport', 'family', 'minivan'] # Assuming these are the possible car types
+tipoCarro = st.selectbox('cartype', ['family', 'sport','combi','minivan'])
 
 
 #Dataframe
