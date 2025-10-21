@@ -54,16 +54,18 @@ data_preparada.head()
 
 #Se normaliza la edad para predecir con Knn, Red
 #En los despliegues no se llama fit
-#data_preparada[['Edad']]= min_max_scaler.transform(data_preparada[['Edad']])
-#data_preparada.head()
+data_preparada[['edad']]= min_max_scaler.transform(data_preparada[['edad']])
+data_preparada.head()
 
 """#**Predicciones**"""
 
 #Ahora que están las variables completas se puede hacer la predicción
-Y_tree = modelo_knn.predict(data_preparada)
-Y_tree
+#Hacemos la predicción con Knn
+Y_fut = modelo_knn.predict(data_preparada)
+data['Knn']=labelencoder.inverse_transform(Y_fut)
+data.head()
 
-print(labelencoder.inverse_transform(Y_tree))
+print(labelencoder.inverse_transform(Y_fut))
 
 #Predicciones finales
 data
