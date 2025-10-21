@@ -28,7 +28,6 @@ modelo_knn, min_max_scaler, variables, labelencoder = pickle.load(open(filename,
 data = pd.read_csv("carRisk - futuro.csv")
 data.head()
 
-!pip install streamlit
 
 #Interfaz Gráfica
 #Se crea interfaz gráfica con streamlit para captura de los datos
