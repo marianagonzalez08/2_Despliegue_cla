@@ -18,6 +18,7 @@ Original file is located at
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import streamlit as st # <-- Agregado aquí para poder usarlo antes
 
 #Cargamos el modelo
 import pickle
@@ -28,20 +29,29 @@ modelo_knn, min_max_scaler, variables, labelencoder = pickle.load(open(filename,
 #data = pd.read_csv("carRisk - futuro.csv")
 #data.head()
 
-#Dataframe
-datos = [[edad, tipoCarro]]
-data = pd.DataFrame(datos, columns=['edad', 'tipoCarro']) #Dataframe con los mismos nombres de variables
+# --- CORRECCIÓN MÍNIMA: Definimos un DataFrame de referencia para el slider ---
+# Esto evita el NameError en el slider. Asume que sabes los rangos válidos de edad.
+data_ref = pd.DataFrame({'edad': [18, 65]})
+# -----------------------------------------------------------------------------
 
 
 #Interfaz Gráfica
 #Se crea interfaz gráfica con streamlit para captura de los datos
 
-import streamlit as st
-
 st.title('Predicción CarRisk')
 
-edad = st.slider('Edad', min_value=data['edad'].min(), max_value=data['edad'].max(), value=int(data['edad'].mean()), step=1)
-tipoCarro = ['combi', 'sport', 'family', 'minivan'] 
+# Los inputs del usuario definen las variables
+edad = st.slider('Edad', min_value=data_ref['edad'].min(), max_value=data_ref['edad'].max(), value=int(data_ref['edad'].mean()), step=1)
+tipoCarro_opciones = ['combi', 'sport', 'family', 'minivan']
+tipoCarro = st.selectbox('Tipo de Carro', tipoCarro_opciones) # <-- Usar selectbox para tipoCarro
+
+
+# --- CORRECCIÓN PRINCIPAL: MOVER LA CREACIÓN DEL DATAFRAME AQUÍ ---
+# Dataframe
+datos = [[edad, tipoCarro]]
+# 'data' se crea con los valores de los sliders, resolviendo el NameError.
+data = pd.DataFrame(datos, columns=['edad', 'tipoCarro']) #Dataframe con los mismos nombres de variables
+# ------------------------------------------------------------------
 
 
 #Se realiza la preparación
@@ -50,27 +60,28 @@ data_preparada=data.copy()
 #Preparamos los datos futuros: dummies
 data_preparada=data.copy()
 data_preparada = pd.get_dummies(data_preparada, columns=['tipoCarro'], dtype=int, drop_first=False) #Siempre drop_first=False en el despliegue
-data_preparada.head()
+# data_preparada.head() # <-- Comentado: .head() no se usa en Streamlit
 
 #Se adicionan las columnas faltantes
 data_preparada=data_preparada.reindex(columns=variables,fill_value=0)
-data_preparada.head()
+# data_preparada.head() # <-- Comentado
 
 #Se normaliza la edad para predecir con Knn, Red
 #En los despliegues no se llama fit
-#data_preparada[['Edad']]= min_max_scaler.transform(data_preparada[['Edad']])
-#data_preparada.head()
+data_preparada[['edad']]= min_max_scaler.transform(data_preparada[['edad']]) # <-- Corregido para usar 'edad'
+# data_preparada.head() # <-- Comentado
 
 """#**Predicciones**"""
 
 #Ahora que están las variables completas se puede hacer la predicción
 Y_knn = modelo_knn.predict(data_preparada)
-Y_knn
+# Y_knn # <-- Comentado: variable sola no muestra nada en Streamlit
 
-print(labelencoder.inverse_transform(Y_tree))
+# print(labelencoder.inverse_transform(Y_tree)) # <-- CORRECCIÓN: Usar Y_knn
+st.success(f"La predicción de riesgo es: {labelencoder.inverse_transform(Y_knn)[0]}")
 
 #Predicciones finales
-data
+# data # <-- Comentado: variable sola no muestra nada en Streamlit
 
 #Cargar datos futuros
 #data = pd.read_csv("carRisk - futuro.csv")
