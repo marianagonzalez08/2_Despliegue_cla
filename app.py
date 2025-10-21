@@ -25,8 +25,8 @@ filename = 'modelo-cla.pkl'
 modelo_knn, min_max_scaler, variables, labelencoder = pickle.load(open(filename, 'rb'))
 
 #Cargamos los datos futuros
-data = pd.read_csv("carRisk - futuro.csv")
-data.head()
+#data = pd.read_csv("carRisk - futuro.csv")
+#data.head()
 
 
 #Interfaz Gráfica
