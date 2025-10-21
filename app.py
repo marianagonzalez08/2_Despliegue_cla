@@ -28,6 +28,10 @@ modelo_knn, min_max_scaler, variables, labelencoder = pickle.load(open(filename,
 #data = pd.read_csv("carRisk - futuro.csv")
 #data.head()
 
+#Dataframe
+datos = [[edad, tipoCarro]]
+data = pd.DataFrame(datos, columns=['edad', 'tipoCarro']) #Dataframe con los mismos nombres de variables
+
 
 #Interfaz Gráfica
 #Se crea interfaz gráfica con streamlit para captura de los datos
@@ -39,9 +43,6 @@ st.title('Predicción CarRisk')
 edad = st.slider('Edad', min_value=data['edad'].min(), max_value=data['edad'].max(), value=int(data['edad'].mean()), step=1)
 tipoCarro = ['combi', 'sport', 'family', 'minivan'] 
 
-#Dataframe
-datos = [[edad, tipoCarro]]
-data = pd.DataFrame(datos, columns=['edad', 'tipoCarro']) #Dataframe con los mismos nombres de variables
 
 #Se realiza la preparación
 data_preparada=data.copy()
@@ -63,8 +64,8 @@ data_preparada.head()
 """#**Predicciones**"""
 
 #Ahora que están las variables completas se puede hacer la predicción
-Y_tree = modelo_knn.predict(data_preparada)
-Y_tree
+Y_knn = modelo_knn.predict(data_preparada)
+Y_knn
 
 print(labelencoder.inverse_transform(Y_tree))
 
